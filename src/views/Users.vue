@@ -1,6 +1,6 @@
 <template>
-    <div>
-
+    <div class=" text-purple-500">
+hh
     </div>
 </template>
 
