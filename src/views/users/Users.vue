@@ -74,9 +74,9 @@ const storeUser = (info) => {
       email: info.email,
       username: "",
       address: {
-        street: "",
+        street: "custom street",
         suite: "",
-        city: "",
+        city: "custom city",
         zipcode: "",
         geo: {
           lat: info.latitude,
@@ -96,14 +96,15 @@ const storeUser = (info) => {
 </script>
 
 <template>
-  <div class="flex justify-center flex-col items-center min-h-screen w-full">
+  <div class="flex justify-center p-4 flex-col items-center min-h-screen w-full">
     <h1 v-if="isLoading">...is loading</h1>
     <p v-else-if="errorMsg" class="text-danger-500 text-xl">{{ errorMsg }}</p>
     <div class="w-full flex flex-col justify-center items-center" v-else>
       <UserForm @user-form-info="storeUser" />
       <FilterForm :users="users" />
-      <table
-        className="border-2 border-gray-300 p-16 md:w-4/5 shadow rounded-2xl overflow-hidden"
+      <div class="overflow-auto w-4/5  ">
+        <table
+        className="border border-gray-200 p-16 w-full shadow rounded-2xl "
       >
         <thead>
           <tr>
@@ -126,6 +127,7 @@ const storeUser = (info) => {
           />
         </tbody>
       </table>
+      </div>
     </div>
   </div>
 </template>

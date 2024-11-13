@@ -5,7 +5,7 @@
         <td className="text-center p-3 text-sm">{{email}}</td>
         <td className="text-center p-3 text-sm">{{ lat }}</td>
         <td className="text-center p-3 text-sm">{{long}}</td>
-        <td className="text-center p-3 text-sm">جزییات بیشتر</td>
+        <td className="text-center p-3 text-md underline text-blue-600"> <RouterLink :to="`/user/${id}`">جزییات بیشتر</RouterLink></td>
       </tr>
   
 </template>

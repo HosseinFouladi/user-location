@@ -1,6 +1,43 @@
+<script setup lang="ts">
+import type { User } from "@/utilities";
+import { computed, ref, watch } from "vue";
+import { useUserStore } from "@/stores/user";
+
+type UserProps = {
+  users: Array<User>;
+};
+const props = defineProps<UserProps>();
+
+const {setFormData,formDatas}=useUserStore()
+const name = ref(formDatas.name||"");
+const sortType = ref<"1" | "2"|"0">(formDatas.sortingType||"0"); //1:asc 2:desc and 0 for default
+
+
+//suggest user name to user on every input value changes
+const autoCompletedusers = computed(() => {
+  if (name.value === "") return [];
+  return props.users.filter((item) => item.name.includes(name.value));
+});
+
+//check display of suggested box in ui
+const checkAutoCompleteOpening = computed(() => {
+  const nameExist = autoCompletedusers.value.some(
+    (item) => item.name === name.value
+  );
+  return autoCompletedusers.value.length > 0 && !nameExist;
+});
+
+const handleSearch = () => {
+    setFormData({
+        name:name.value,
+        sortingType:sortType.value
+    })
+};
+</script>
+
 <template>
-  <div class="flex md:w-4/5 justify-between   py-4 border border-gray-200 rounded-lg px-4 mb-4 ">
-    <div class="flex gap-24">
+  <div class="flex flex-col gap-4 items-center lg:flex-row  lg:w-4/5 justify-between   py-4 border border-gray-200 rounded-lg px-4 mb-4 ">
+    <div class="flex lg:gap-24 gap-4 flex-col lg:flex-row">
         <div class="relative w-[300px]">
       <input
         type="text"
@@ -38,42 +75,5 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import type { User } from "@/utilities";
-import { computed, ref, watch } from "vue";
-import { useUserStore } from "@/stores/user";
-
-type UserProps = {
-  users: Array<User>;
-};
-const props = defineProps<UserProps>();
-
-const {setFormData,formDatas}=useUserStore()
-const name = ref(formDatas.name||"");
-const sortType = ref<"1" | "2"|"0">(formDatas.sortingType||"0"); //1:asc 2:desc and 0 for default
 
 
-//suggest user name to user on every input value changes
-const autoCompletedusers = computed(() => {
-  if (name.value === "") return [];
-  return props.users.filter((item) => item.name.includes(name.value));
-});
-
-//check display of suggested box in ui
-const checkAutoCompleteOpening = computed(() => {
-  const nameExist = autoCompletedusers.value.some(
-    (item) => item.name === name.value
-  );
-  return autoCompletedusers.value.length > 0 && !nameExist;
-});
-
-const handleSearch = () => {
-    setFormData({
-        name:name.value,
-        sortingType:sortType.value
-    })
-    
-};
-</script>
-
-<style scoped></style>

@@ -44,12 +44,15 @@
 import { ref } from "vue";
 
 const emit = defineEmits(["userFormInfo"]);
+
 const userInfo = ref({
   name: "",
   email: "",
-  latitude: 1,
-  longitude: 1,
+  latitude: 0,
+  longitude: 0,
 });
+
+//pass form input data to parent component
 const submitUser = () => {
     emit('userFormInfo',userInfo.value)
 };

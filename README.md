@@ -1,39 +1,23 @@
-# user-info-task
-
-This template should help get you started developing with Vue 3 in Vite.
-
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
 
 ## Project Setup
+
+after cloning repository from main branch, run below command for installing project packages
 
 ```sh
 npm install
 ```
 
 ### Compile and Hot-Reload for Development
-
+for running project use this comand
 ```sh
 npm run dev
 ```
 
 ### Type-Check, Compile and Minify for Production
-
+for building run this:
 ```sh
 npm run build
 ```
+ after running project, u see list of users in table and u can press detail link to see location of spicific user
 
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+ thats it!
