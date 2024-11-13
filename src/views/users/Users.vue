@@ -5,21 +5,27 @@ import UserTable from "./components/UserTable.vue";
 import FilterForm from "./components/FilterForm.vue";
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
+import UserForm from "./components/UserForm.vue";
 
-const users = ref<Array<User>>();
+//const users = ref<Array<User>>();
 const isLoading = ref(true);
 const errorMsg = ref("");
 
 const store = useUserStore();
-const { formDatas } = storeToRefs(store);
+const { formDatas,users } = storeToRefs(store);
+const{setUsers}=store
 
 //get user list from api in initial render
 onMounted(async () => {
+  if(users.value&&users.value.length>0) {
+    isLoading.value=false;
+    return
+  };
   const data = await useUserList();
   isLoading.value = false;
 
   data.status === 200
-    ? (users.value = data.data)
+    ? (setUsers(data.data))
     : (errorMsg.value = "something went wrong plz try again");
 });
 
@@ -29,33 +35,64 @@ const searchedUsers = computed(() => {
     item.name.includes(formDatas.value.name)
   );
   if (formDatas.value.sortingType === "0") return searchedValues;
-  else if (formDatas.value.sortingType === "1") return searchedValues.sort((a, b) => {
-  const nameA = a.name.toUpperCase(); // ignore upper and lowercase
-  const nameB = b.name.toUpperCase(); // ignore upper and lowercase
-  if (nameA < nameB) {
-    return -1;
-  }
-  if (nameA > nameB) {
-    return 1;
-  }
+  else if (formDatas.value.sortingType === "1")
+    return searchedValues.sort((a, b) => {
+      const nameA = a.name.toUpperCase(); // ignore upper and lowercase
+      const nameB = b.name.toUpperCase(); // ignore upper and lowercase
+      if (nameA < nameB) {
+        return -1;
+      }
+      if (nameA > nameB) {
+        return 1;
+      }
 
-  // names must be equal
-  return 0;
-});
+      // names must be equal
+      return 0;
+    });
   return searchedValues.sort((a, b) => {
-  const nameA = a.name.toUpperCase(); // ignore upper and lowercase
-  const nameB = b.name.toUpperCase(); // ignore upper and lowercase
-  if (nameA < nameB) {
-    return 1;
-  }
-  if (nameA > nameB) {
-    return -1;
-  }
+    const nameA = a.name.toUpperCase(); // ignore upper and lowercase
+    const nameB = b.name.toUpperCase(); // ignore upper and lowercase
+    if (nameA < nameB) {
+      return 1;
+    }
+    if (nameA > nameB) {
+      return -1;
+    }
 
-  // names must be equal
-  return 0;
+    // names must be equal
+    return 0;
+  });
 });
-});
+
+//submit new user
+const storeUser = (info) => {
+  setUsers([
+    ...users.value,
+    {
+      id: Math.random() * 1000 + 1,
+      name: info.name,
+      email: info.email,
+      username: "",
+      address: {
+        street: "",
+        suite: "",
+        city: "",
+        zipcode: "",
+        geo: {
+          lat: info.latitude,
+          lng: info.longitude,
+        },
+      },
+      phone: "",
+      website: "",
+      company: {
+        name: " ",
+        catchPhrase: "",
+        bs: "",
+      },
+    },
+  ]);
+};
 </script>
 
 <template>
@@ -63,6 +100,7 @@ const searchedUsers = computed(() => {
     <h1 v-if="isLoading">...is loading</h1>
     <p v-else-if="errorMsg" class="text-danger-500 text-xl">{{ errorMsg }}</p>
     <div class="w-full flex flex-col justify-center items-center" v-else>
+      <UserForm @user-form-info="storeUser" />
       <FilterForm :users="users" />
       <table
         className="border-2 border-gray-300 p-16 md:w-4/5 shadow rounded-2xl overflow-hidden"
